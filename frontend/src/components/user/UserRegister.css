@@ -1,0 +1,39 @@
+.user-register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.user-register-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.user-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f0f6ff;
+}
+
+.full-width {
+  width: 100%;
+}
