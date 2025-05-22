@@ -1,39 +1,37 @@
-.user-register-container {
+.signin-container {
   display: flex;
   justify-content: center;
-  align-items: center; 
-  height: 100vh;
-  background-color: #f5f5f5;
+  align-items: center;
+  padding: 40px;
 }
 
-.user-register-card {
+.signin-card {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 30px;
+  width: 350px;
+  padding: 24px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
 }
 
-.user-register-form {
+.signin-info {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+.signin-btn {
+   background: var(--bg-dark);
+    color: white;
+    font-weight: 500;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    
 }
 
-.input-field {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f0f6ff;
-}
-
-.full-width {
-  width: 100%;
+.signin-btn:hover {
+  background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
 }
