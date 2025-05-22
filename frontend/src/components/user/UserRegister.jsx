@@ -1,26 +1,14 @@
-import React, { useState } from 'react';
-import './UserRegister.css'; 
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import Main from "../template/Main";
 import "./UserRegister.css";
 
-export default function UserRegister() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    role: 'user'
-  });
 const headerProps = {
   icon: "user-plus",
   title: "Cadastro de Usuários",
   subtitle: "Tela de Cadastro"
 };
 
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  }
 class UserRegister extends Component {
   state = {
     email: "",
@@ -28,10 +16,6 @@ class UserRegister extends Component {
     role: "user"
   };
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log('Submitted:', formData);
-  }
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -51,51 +35,6 @@ class UserRegister extends Component {
   render() {
     const { email, password, role } = this.state;
 
-  return (
-    <div className="user-register-container">
-      <div className="user-register-card">
-        <form onSubmit={handleSubmit} className="user-register-form">
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              className="input-field"
-            />
-          </div>
-          <div className="form-group">
-            <label>Senha:</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-              className="input-field"
-            />
-          </div>
-          <div className="form-group">
-            <label>Nível:</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              className="input-field"
-            >
-              <option value="user">Usuário</option>
-              <option value="admin">Administrador</option>
-            </select>
-          </div>
-          <button type="submit" className="task-btn full-width">
-            Cadastrar
-          </button>
-        </form>
-      </div>
-    </div>
-  );
     return (
       <Main {...headerProps}>
         <div className="signin-container">
