@@ -21,5 +21,8 @@ export default props =>
             <Link to="/leaderboard">
                 <i className="board"></i> Pontuação Geral
             </Link>
+            <Link to="/profile">
+                <i className="fa fa-user"></i> Meu perfil
+            </Link>
         </nav>
     </aside>
