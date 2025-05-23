@@ -1,0 +1,70 @@
+.landing-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    padding: 2rem;
+    background: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.landing-left {
+    flex: 1;
+    padding: 2rem;
+}
+
+.landing-left h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+}
+
+.landing-left .highlight {
+    color: #1ca1e9;
+}
+
+.landing-left p {
+    font-size: 1.25rem;
+    margin-top: 1rem;
+}
+
+.landing-buttons {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--bg-dark, #07a7e3); 
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #1ca1e9;
+    border: 2px solid #1ca1e9;
+}
+
+.btn-secondary:hover {
+     background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
+    color: white;
+}
