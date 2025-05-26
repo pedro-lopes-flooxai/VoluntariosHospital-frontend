@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./LandingPage.css";
+import UserLogin from "../user/UserLogin";
+import voluntarioImg from "../../assets/imgs/voluntario.png";
 
 export default function LandingPage() {
+    const [showLogin, setShowLogin] = useState(false);
+
     return (
         <div className="landing-container">
             <div className="landing-left">
@@ -18,13 +22,18 @@ export default function LandingPage() {
                     <Link to="/home" className="btn-primary">
                         Comece agora →
                     </Link>
-                    <button className="btn-secondary">Entrar em sua conta</button>
+                    <button className="btn-secondary" onClick={() => setShowLogin(true)}>
+                        Entrar em sua conta
+                    </button>
                 </div>
             </div>
+
             <div className="landing-right">
-
-
+                <img src={voluntarioImg} alt="Imagem de voluntariado" className="landing-image" />
             </div>
+
+
+            <UserLogin show={showLogin} onClose={() => setShowLogin(false)} />
         </div>
     );
 }
