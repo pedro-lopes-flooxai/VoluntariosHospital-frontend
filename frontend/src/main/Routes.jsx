@@ -8,6 +8,7 @@ import Tasks from '../components/tasks/Tasks';
 import TasksDetails from '../components/tasks/TasksDetails';
 import Board from '../components/leaderboard/Board';
 import UserRegister from '../components/user/UserRegister';
+import UserLogin from '../components/user/UserLogin';
 import Profile from '../components/profile/Profile';
 import MyTasks from '../components/profile/Mytasks';
 
@@ -16,6 +17,7 @@ export default function AppRoutes() {
         <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<UserLogin />} />
             <Route path="/users" element={<UserCrud />} />
             <Route path="/register" element={<UserRegister />} />
             <Route path="/tasks/:id" element={<TasksDetails />} />
