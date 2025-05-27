@@ -20,9 +20,6 @@ export default function Nav() {
         <Link to="/users">
           <FaUsers /> Usuários
         </Link>
-        <Link to="/register">
-          <FaUserPlus /> Cadastro de Usuários
-        </Link>
         <Link to="/tasks">
           <FaTasks /> Vagas
         </Link>
