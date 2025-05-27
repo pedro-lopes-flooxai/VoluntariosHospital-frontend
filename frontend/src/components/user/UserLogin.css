@@ -46,3 +46,41 @@
   color: #333;
 }
 
+.form-control {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.forgot-link {
+  margin-top: 8px;
+  text-align: right;
+  text-decoration: none;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.signin-btn {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: var(--bg-dark);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signin-btn:hover {
+  background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
+}

@@ -2,6 +2,8 @@
 import Main from "../template/Main";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import "./UserCrud.css";
+import { FaChevronDown } from "react-icons/fa";
+
 
 const headerProps = {
   icon: "users",
@@ -139,10 +141,13 @@ function UserModal({ onSave, onClose, user }) {
           {error && <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>}
 
           <label>Nível</label>
-          <select value={role} onChange={e => setRole(e.target.value)}>
-            <option value="usuario">Usuário</option>
-            <option value="admin">Administrador</option>
-          </select>
+          <div className="custom-select">
+            <select value={role} onChange={e => setRole(e.target.value)}>
+              <option value="usuario">Usuário</option>
+              <option value="admin">Administrador</option>
+            </select>
+            <FaChevronDown className="select-icon" />
+          </div>
 
           <div className="modal-buttons">
             <button type="submit" className="modal-btn save-btn">Salvar</button>
