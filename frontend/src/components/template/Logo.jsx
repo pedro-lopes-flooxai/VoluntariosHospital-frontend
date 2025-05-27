@@ -6,7 +6,7 @@ import './Logo.css';
 export default function Logo() {
   return (
     <aside className="logo">
-      <Link to="/" className="logo">
+      <Link to="/home" className="logo">
         <img src={logo} alt="Logo" />
       </Link>
     </aside>
