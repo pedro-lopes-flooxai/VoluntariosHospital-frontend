@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FaCalendarAlt } from 'react-icons/fa'
+import { FaCalendarAlt, FaPlus } from 'react-icons/fa'
 import Main from '../template/Main'
 import tasks from './tasksData'
+import CreateTaskModal from './CreateTask' 
 import './Tasks.css'
 
 const headerProps = {
@@ -13,9 +14,42 @@ const headerProps = {
 
 export default function Tasks() {
   const [taskList] = useState(tasks)
+  const [showModal, setShowModal] = useState(false)
+  const [newTask, setNewTask] = useState({
+    patient: '',
+    title: '',
+    type: 'Cuidados com idosos',
+    hours: '',
+    requirements: '',
+    daysLeft: '',
+    score: '',
+    photo: ''
+  })
+
+  const handleCreateTask = (e) => {
+    e.preventDefault()
+    console.log('Tarefa criada:', newTask)
+    setShowModal(false)
+    setNewTask({
+      patient: '',
+      title: '',
+      type: 'Cuidados com idosos',
+      hours: '',
+      requirements: '',
+      daysLeft: '',
+      score: '',
+      photo: ''
+    })
+  }
 
   return (
     <Main {...headerProps}>
+      <div className="tasks-header">
+        <button className="create-task-btn" onClick={() => setShowModal(true)}>
+          <FaPlus /> Criar Tarefa
+        </button>
+      </div>
+
       <div className="tasks-container">
         {taskList.map(task => (
           <div key={task.id} className="task-card">
@@ -34,6 +68,15 @@ export default function Tasks() {
           </div>
         ))}
       </div>
+
+      {showModal && (
+        <CreateTaskModal
+          newTask={newTask}
+          setNewTask={setNewTask}
+          onClose={() => setShowModal(false)}
+          onCreateTask={handleCreateTask}
+        />
+      )}
     </Main>
   )
 }

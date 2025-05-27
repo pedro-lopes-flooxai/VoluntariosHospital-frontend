@@ -46,3 +46,27 @@
   align-items: center;
   gap: 5px;
 }
+
+.tasks-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 20px 0 20px;
+}
+
+.create-task-btn {
+  background: var(--bg-dark);
+  color: white;
+  font-weight: 500;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s ease;
+}
+
+.create-task-btn:hover {
+  background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
+}

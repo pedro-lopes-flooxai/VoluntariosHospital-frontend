@@ -137,3 +137,28 @@
   gap: 10px;
   margin-top: 20px;
 }
+
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 10px 30px 10px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #888;
+  font-size: 14px;
+}
