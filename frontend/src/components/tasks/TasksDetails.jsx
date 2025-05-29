@@ -10,12 +10,20 @@ export default function TaskDetails() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const user = JSON.parse(localStorage.getItem('user'))
+
   const taskId = parseInt(location.state?.taskId || id)
   const task = tasksData.find(task => task.id === taskId)
 
   if (!task) return <p>Tarefa não encontrada.</p>
 
   const handleApply = () => {
+    if (!user) {
+      alert('Você precisa estar logado para se candidatar.')
+      navigate('/login') 
+      return
+    }
+
     const applied = JSON.parse(localStorage.getItem('appliedTasks') || '[]')
     if (!applied.includes(taskId)) {
       applied.push(taskId)
