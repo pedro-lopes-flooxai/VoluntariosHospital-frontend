@@ -36,3 +36,24 @@ aside.menu-area {
   }
 }
 
+.menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: 300;
+  padding: 15px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.menu button:hover {
+  background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
+}
+
+
