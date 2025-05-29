@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaCalendarAlt, FaPlus } from 'react-icons/fa'
 import Main from '../template/Main'
 import tasks from './tasksData'
-import CreateTaskModal from './CreateTask' 
+import CreateTaskModal from './CreateTask'
 import './Tasks.css'
 
 const headerProps = {
@@ -13,6 +13,7 @@ const headerProps = {
 }
 
 export default function Tasks() {
+  const navigate = useNavigate()
   const [taskList] = useState(tasks)
   const [showModal, setShowModal] = useState(false)
   const [newTask, setNewTask] = useState({
@@ -25,6 +26,8 @@ export default function Tasks() {
     score: '',
     photo: ''
   })
+
+  const user = JSON.parse(localStorage.getItem('user'))
 
   const handleCreateTask = (e) => {
     e.preventDefault()
@@ -42,10 +45,19 @@ export default function Tasks() {
     })
   }
 
+  const handleCreateClick = () => {
+    if (!user) {
+      alert('Você precisa estar logado para criar uma tarefa.')
+      navigate('/login')
+    } else {
+      setShowModal(true)
+    }
+  }
+
   return (
     <Main {...headerProps}>
       <div className="tasks-header">
-        <button className="create-task-btn" onClick={() => setShowModal(true)}>
+        <button className="create-task-btn" onClick={handleCreateClick}>
           <FaPlus /> Criar Tarefa
         </button>
       </div>
