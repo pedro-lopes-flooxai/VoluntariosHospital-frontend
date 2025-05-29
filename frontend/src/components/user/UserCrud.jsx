@@ -1,9 +1,13 @@
- import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaChevronDown } from "react-icons/fa";
+import {
+  fetchUsers,
+  createUser,
+  updateUser,
+  deleteUser
+} from "./userService";
 import "./UserCrud.css";
-import { FaChevronDown } from "react-icons/fa";
-
 
 const headerProps = {
   icon: "users",
@@ -12,41 +16,71 @@ const headerProps = {
 };
 
 export default function UserCrud() {
-  const [users, setUsers] = useState([
-    { id: 1, name: "Maria Julia da Silva", email: "mjds@empresa.com", role: "usuario" },
-    { id: 2, name: "Ana Silva Alt", email: "anasilva@negocio.com.br", role: "admin" }
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({ name: "", email: "" });
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+  const [error, setError] = useState(null);
 
-  const filteredUsers = users.filter(u =>
-    u.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-    u.email.toLowerCase().includes(filters.email.toLowerCase())
+  const token = localStorage.getItem("token");
+
+  async function loadUsers() {
+    try {
+      const data = await fetchUsers(token);
+      setUsers(data);
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao buscar usuários. Talvez seu login expirou.");
+    }
+  }
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const filteredUsers = users.filter(
+    (u) =>
+      u.name.toLowerCase().includes(filters.name.toLowerCase()) &&
+      u.email.toLowerCase().includes(filters.email.toLowerCase())
   );
 
-  function handleSave(user) {
-    if (editingUser) {
-      setUsers(users.map(u => (u.id === editingUser.id ? { ...user, id: editingUser.id } : u)));
-    } else {
-      setUsers([...users, { ...user, id: Date.now() }]);
+  async function handleSave(user) {
+    try {
+      if (editingUser) {
+        const updated = await updateUser(editingUser._id, user, token);
+        setUsers(users.map(u => (u._id === editingUser._id ? updated : u)));
+      } else {
+        await createUser(user, token);
+        loadUsers();
+      }
+      closeModal();
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Erro ao salvar usuário");
     }
-    closeModal();
   }
 
   function handleEdit(user) {
     setEditingUser(user);
     setShowModal(true);
+    setError(null);
   }
 
-  function handleDelete(id) {
-    setUsers(users.filter(u => u.id !== id));
+  async function handleDelete(id) {
+    if (!window.confirm("Tem certeza que deseja deletar este usuário?")) return;
+    try {
+      await deleteUser(id, token);
+      setUsers(users.filter((u) => u._id !== id));
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Erro ao deletar usuário");
+    }
   }
 
   function closeModal() {
     setEditingUser(null);
     setShowModal(false);
+    setError(null);
   }
 
   return (
@@ -57,18 +91,20 @@ export default function UserCrud() {
             type="text"
             placeholder="Digite o nome..."
             value={filters.name}
-            onChange={e => setFilters({ ...filters, name: e.target.value })}
+            onChange={(e) => setFilters({ ...filters, name: e.target.value })}
           />
           <input
             type="text"
             placeholder="Digite o e-mail..."
             value={filters.email}
-            onChange={e => setFilters({ ...filters, email: e.target.value })}
+            onChange={(e) => setFilters({ ...filters, email: e.target.value })}
           />
           <button className="modal-btn save-btn" onClick={() => setShowModal(true)}>
             <FaPlus /> Adicionar novo
           </button>
         </div>
+
+        {error && <p style={{ color: "red", marginBottom: 10 }}>{error}</p>}
 
         <table className="user-table">
           <thead>
@@ -76,18 +112,24 @@ export default function UserCrud() {
               <th>ID</th>
               <th>Nome</th>
               <th>E-mail</th>
+              <th>Nível</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
+            {filteredUsers.map((user) => (
+              <tr key={user._id}>
+                <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>{user.role}</td>
                 <td>
-                  <button className="icon-btn edit" onClick={() => handleEdit(user)}><FaEdit /></button>
-                  <button className="icon-btn delete" onClick={() => handleDelete(user.id)}><FaTrash /></button>
+                  <button className="icon-btn edit" onClick={() => handleEdit(user)}>
+                    <FaEdit />
+                  </button>
+                  <button className="icon-btn delete" onClick={() => handleDelete(user._id)}>
+                    <FaTrash />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -95,7 +137,9 @@ export default function UserCrud() {
         </table>
       </div>
 
-      {showModal && <UserModal onSave={handleSave} onClose={closeModal} user={editingUser} />}
+      {showModal && (
+        <UserModal onSave={handleSave} onClose={closeModal} user={editingUser} />
+      )}
     </Main>
   );
 }
@@ -116,6 +160,11 @@ function UserModal({ onSave, onClose, user }) {
       return;
     }
 
+    if (!user && password.trim() === "") {
+      setError("Senha é obrigatória para novo usuário.");
+      return;
+    }
+
     setError("");
     onSave({ name, email, password, role });
   }
@@ -123,26 +172,42 @@ function UserModal({ onSave, onClose, user }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-button" onClick={onClose}>×</button>
-        <h2 style={{ textAlign: "center", marginBottom: 20 }}>{user ? "Editar Usuário" : "Novo Usuário"}</h2>
+        <button className="close-button" onClick={onClose}>
+          ×
+        </button>
+        <h2 style={{ textAlign: "center", marginBottom: 20 }}>
+          {user ? "Editar Usuário" : "Novo Usuário"}
+        </h2>
         <form className="modal-form" onSubmit={handleSubmit}>
           <label>Nome</label>
-          <input type="text" value={name} onChange={e => setName(e.target.value)} required />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
 
           <label>Email</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-          <label>Senha</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <label>Senha {user ? "(deixe vazio para manter)" : ""}</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder={user ? "Senha permanece se vazio" : ""}
+            required={!user}
+          />
 
           <label>Confirmar Senha</label>
-          <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder={user ? "Confirme a senha ou deixe vazio" : ""}
+            required={!user}
+          />
 
           {error && <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>}
 
           <label>Nível</label>
           <div className="custom-select">
-            <select value={role} onChange={e => setRole(e.target.value)}>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="usuario">Usuário</option>
               <option value="admin">Administrador</option>
             </select>
@@ -150,8 +215,12 @@ function UserModal({ onSave, onClose, user }) {
           </div>
 
           <div className="modal-buttons">
-            <button type="submit" className="modal-btn save-btn">Salvar</button>
-            <button type="button" className="modal-btn cancel-btn" onClick={onClose}>Cancelar</button>
+            <button type="submit" className="modal-btn save-btn">
+              Salvar
+            </button>
+            <button type="button" className="modal-btn cancel-btn" onClick={onClose}>
+              Cancelar
+            </button>
           </div>
         </form>
       </div>
