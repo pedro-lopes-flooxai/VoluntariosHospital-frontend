@@ -1,11 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./LandingPage.css";
 import UserLogin from "../user/UserLogin";
 import voluntarioImg from "../../assets/imgs/voluntario.png";
 
 export default function LandingPage() {
     const [showLogin, setShowLogin] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogin = (user) => {
+        console.log("Usuário logado com sucesso:", user);
+        setShowLogin(false);
+        navigate('/home');
+        
+    };
 
     return (
         <div className="landing-container">
@@ -32,8 +40,7 @@ export default function LandingPage() {
                 <img src={voluntarioImg} alt="Imagem de voluntariado" className="landing-image" />
             </div>
 
-
-            <UserLogin show={showLogin} onClose={() => setShowLogin(false)} />
+            <UserLogin show={showLogin} onClose={() => setShowLogin(false)} onLogin={handleLogin} />
         </div>
     );
 }
