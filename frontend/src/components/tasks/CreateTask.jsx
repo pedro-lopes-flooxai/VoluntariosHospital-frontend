@@ -124,13 +124,6 @@ export default function CreateTaskModal({
                         className="form-control"
                         onChange={handleImageUpload}
                     />
-                    {newTask.photo && (
-                        <img
-                            src={newTask.photo}
-                            alt="Preview"
-                            className="preview-photo"
-                        />
-                    )}
                 </div>
 
                 <div className="task-details-buttons">
