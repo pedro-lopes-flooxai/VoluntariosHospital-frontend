@@ -21,18 +21,20 @@ export default function AppRoutes() {
       <Route
         path="/home"
         element={
-            <Home />
+          <Home />
         }
       />
 
-      <Route
-        path="/tasks/:id"
+      <Route path="/tasks"
         element={
-          <PrivateRoute allowedRoles={['user', 'admin']}>
-            <TasksDetails />
-          </PrivateRoute>
-        }
-      />
+          <Tasks />
+        } />
+
+      <Route path="/tasks/:id"
+        element={
+          <TasksDetails />
+        } />
+
 
       <Route
         path="/profile"
