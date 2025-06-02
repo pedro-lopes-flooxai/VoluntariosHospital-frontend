@@ -9,6 +9,7 @@ import TasksDetails from '../components/tasks/TasksDetails';
 import Board from '../components/leaderboard/Board';
 import Profile from '../components/profile/Profile';
 import MyTasks from '../components/profile/Mytasks';
+import TasksCandidates from '../components/tasks/TasksCandidates';
 import PrivateRoute from './PrivateRoute';
 
 export default function AppRoutes() {
@@ -59,6 +60,15 @@ export default function AppRoutes() {
         element={
           <PrivateRoute allowedRoles={['admin']}>
             <UserCrud />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/tasks/:id/candidates"
+        element={
+          <PrivateRoute allowedRoles={['admin']}>
+            <TasksCandidates />
           </PrivateRoute>
         }
       />
