@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Main from '../template/Main'
-import { FaArrowLeft, FaPaperPlane } from 'react-icons/fa'
+import { FaArrowLeft, FaPaperPlane, FaUsers } from 'react-icons/fa'
 import './TasksDetails.css'
 
 export default function TaskDetails() {
@@ -12,6 +12,7 @@ export default function TaskDetails() {
   const [error, setError] = useState(null)
 
   const user = JSON.parse(localStorage.getItem('user'))
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/tasks/${id}`)
@@ -36,13 +37,22 @@ export default function TaskDetails() {
       return
     }
 
-    const applied = JSON.parse(localStorage.getItem('appliedTasks') || '[]')
-    if (!applied.includes(id)) {
-      applied.push(id)
-      localStorage.setItem('appliedTasks', JSON.stringify(applied))
-    }
-    alert('Candidatura enviada!')
-    navigate('/tasks')
+    fetch(`http://localhost:5000/api/tasks/${id}/apply`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message)
+        navigate('/tasks')
+      })
+      .catch(err => {
+        alert('Erro ao se candidatar.')
+        console.error(err)
+      })
   }
 
   if (loading) return <p>Carregando tarefa...</p>
@@ -74,9 +84,20 @@ export default function TaskDetails() {
             <button className="task-details-btn" onClick={() => navigate(-1)}>
               <FaArrowLeft /> Voltar
             </button>
-            <button className="task-details-btn apply-btn" onClick={handleApply}>
-              <FaPaperPlane /> Candidatar-se
-            </button>
+
+            {user?.role === 'admin' ? (
+              <button
+                className="task-details-btn"
+                onClick={() => navigate(`/tasks/${id}/candidates`)}
+              >
+                <FaUsers /> Ver Candidatos
+              </button>
+            ) : (
+              <button className="task-details-btn apply-btn" onClick={handleApply}>
+                <FaPaperPlane /> Candidatar-se
+              </button>
+            )}
+
           </div>
         </div>
       </div>
