@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import { Link } from "react-router-dom";
 import './Profile.css';
@@ -10,30 +10,102 @@ const headerProps = {
 };
 
 const Profile = () => {
+  const [userData, setUserData] = useState(null);
+  const [acceptedTasks, setAcceptedTasks] = useState([]);
+  const [loadingTasks, setLoadingTasks] = useState(true);
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (!token) return;
+
+    fetch('http://localhost:5000/api/users/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => setUserData(data))
+      .catch(err => console.error('Erro ao carregar dados do usuário:', err));
+
+    fetch('http://localhost:5000/api/tasks/applied', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error(`Erro HTTP! status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAcceptedTasks(data);
+        } else {
+          setAcceptedTasks([]);
+        }
+        setLoadingTasks(false);
+      })
+      .catch(err => {
+        console.error('Erro ao carregar tarefas candidatas:', err);
+        setAcceptedTasks([]);
+        setLoadingTasks(false);
+      });
+  }, [token]);
+
+  if (!userData) return <p>Carregando perfil...</p>;
+
+  const totalPoints = acceptedTasks.reduce((sum, task) => sum + (task.score || 0), 0);
+
   return (
     <Main {...headerProps}>
       <div className="profile-container">
         <div className="profile-card">
           <div className="profile-section">
-            <p className="mb-0"><strong>Nome:</strong> .</p>
-            <p className="mb-0"><strong>Email:</strong> .</p>
-            <p className="mb-0"><strong>Pontos:</strong> .</p>
+            <p><strong>Nome:</strong> {userData.name}</p>
+            <p><strong>Email:</strong> {userData.email}</p>
+            <p><strong>Pontos acumulados:</strong> {
+              acceptedTasks
+                .filter(task => task.status === 'approved')
+                .reduce((sum, task) => sum + (task.score || 0), 0)
+            }</p>
           </div>
 
           <hr />
 
           <div className="profile-section">
-            <Link to="/mytasks" className="profile-link">
-              Ver Tarefas Aceitas
-            </Link>
+            <h4>Tarefas candidatas</h4>
+            {loadingTasks ? (
+              <p>Carregando tarefas...</p>
+            ) : acceptedTasks.length === 0 ? (
+              <p>Você ainda não se candidatou a nenhuma tarefa.</p>
+            ) : (
+              <div className="tasks-list">
+                {acceptedTasks.map(task => {
+                  const statusMap = {
+                    pending: 'Pendente',
+                    approved: 'Aprovada',
+                    rejected: 'Rejeitada'
+                  };
+
+                  const statusClassMap = {
+                    pending: 'status-pending',
+                    approved: 'status-approved',
+                    rejected: 'status-rejected'
+                  };
+
+                  return (
+                    <div key={task._id} className="task-card">
+                      <p><strong>{task.title}</strong></p>
+                      <p className={`task-status ${statusClassMap[task.status]}`}>
+                        Status: {statusMap[task.status] || task.status}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+
+            )}
           </div>
 
           <hr />
 
           <div className="profile-section">
-            <Link to="/" className="profile-link highlight-exit">
-              Sair
-            </Link>
+            <Link to="/" className="profile-link highlight-exit">Sair</Link>
           </div>
         </div>
       </div>

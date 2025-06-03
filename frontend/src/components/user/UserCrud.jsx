@@ -190,7 +190,7 @@ function UserModal({ onSave, onClose, user }) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder={user ? "Senha permanece se vazio" : ""}
+            placeholder={user ? "Deixe a senha vazia para mantê-la" : ""}
             required={!user}
           />
 

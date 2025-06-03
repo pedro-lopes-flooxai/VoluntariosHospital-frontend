@@ -38,3 +38,40 @@
 .profile-link:hover {
   background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
 }
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.task-status {
+  margin-top: 4px;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.status-approved {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.status-rejected {
+  background-color: #dc3545;
+  color: white;
+}
