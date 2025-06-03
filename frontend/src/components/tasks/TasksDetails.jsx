@@ -44,14 +44,15 @@ export default function TaskDetails() {
         Authorization: `Bearer ${token}`
       }
     })
-      .then(res => res.json())
-      .then(data => {
+      .then(async (res) => {
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.message || 'Erro desconhecido ao se candidatar')
         alert(data.message)
-        navigate('/tasks')
+        navigate('/profile')
       })
       .catch(err => {
-        alert('Erro ao se candidatar.')
-        console.error(err)
+        alert(`Erro: ${err.message}`)
+        console.error('Erro ao se candidatar:', err)
       })
   }
 
@@ -80,6 +81,7 @@ export default function TaskDetails() {
               <p><strong>Dias restantes:</strong> {task.daysLeft}</p>
             </div>
           </div>
+
           <div className="task-details-buttons">
             <button className="task-details-btn" onClick={() => navigate(-1)}>
               <FaArrowLeft /> Voltar
@@ -97,7 +99,6 @@ export default function TaskDetails() {
                 <FaPaperPlane /> Candidatar-se
               </button>
             )}
-
           </div>
         </div>
       </div>
