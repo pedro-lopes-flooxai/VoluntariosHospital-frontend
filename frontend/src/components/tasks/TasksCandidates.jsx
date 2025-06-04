@@ -18,8 +18,11 @@ export default function TasksCandidates() {
     fetch(`http://localhost:5000/api/tasks/${id}`)
       .then(res => res.json())
       .then(data => {
-        setCandidates(data.candidates);
-        setTaskTitle(data.title);
+        setCandidates(data.candidates || []);
+        setTaskTitle(data.title || 'Tarefa');
+      })
+      .catch(err => {
+        console.error('Erro ao buscar tarefa:', err);
       });
   }, [id]);
 
@@ -36,9 +39,12 @@ export default function TasksCandidates() {
       .then(() => {
         setCandidates(prev =>
           prev.map(c =>
-            c.user._id === candidateId ? { ...c, status } : c
+            c.user && c.user._id === candidateId ? { ...c, status } : c
           )
         );
+      })
+      .catch(err => {
+        console.error('Erro ao atualizar status:', err);
       });
   };
 
@@ -47,9 +53,9 @@ export default function TasksCandidates() {
       <h2>Candidatos para: {taskTitle}</h2>
       {candidates.length === 0 && <p>Nenhum candidato ainda.</p>}
 
-      {candidates.map(c => (
-        <div key={c.user._id} className="candidate-card">
-          <p><strong>Nome:</strong> {c.user.name}</p>
+      {candidates.map((c, index) => (
+        <div key={c.user?._id || index} className="candidate-card">
+          <p><strong>Nome:</strong> {c.user?.name || 'Desconhecido'}</p>
           <p><strong>Status:</strong> {statusLabels[c.status]}</p>
           {c.status === 'pending' && (
             <div className="candidate-actions">
