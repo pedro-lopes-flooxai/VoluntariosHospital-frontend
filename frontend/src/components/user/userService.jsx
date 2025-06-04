@@ -10,7 +10,7 @@ export async function fetchUsers(token) {
 }
 
 export async function createUser(user, token) {
-  const res = await axios.post(API_URL, user, {
+  const res = await axios.post(`${API_URL}/register`, user, {
     headers: { Authorization: `Bearer ${token}` }
   });
   return res.data;
