@@ -149,7 +149,7 @@ function UserModal({ onSave, onClose, user }) {
   const [email, setEmail] = useState(user?.email || "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState(user?.role || "usuario");
+  const [role, setRole] = useState(user?.role || "user");
   const [error, setError] = useState("");
 
   function handleSubmit(e) {
@@ -208,7 +208,7 @@ function UserModal({ onSave, onClose, user }) {
           <label>Nível</label>
           <div className="custom-select">
             <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="usuario">Usuário</option>
+              <option value="user">Usuário</option>
               <option value="admin">Administrador</option>
             </select>
             <FaChevronDown className="select-icon" />
