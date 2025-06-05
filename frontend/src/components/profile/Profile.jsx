@@ -49,8 +49,6 @@ const Profile = () => {
 
   if (!userData) return <p>Carregando perfil...</p>;
 
-  const totalPoints = acceptedTasks.reduce((sum, task) => sum + (task.score || 0), 0);
-
   return (
     <Main {...headerProps}>
       <div className="profile-container">
@@ -58,49 +56,48 @@ const Profile = () => {
           <div className="profile-section">
             <p><strong>Nome:</strong> {userData.name}</p>
             <p><strong>Email:</strong> {userData.email}</p>
-            <p><strong>Pontos acumulados:</strong> {
-              acceptedTasks
-                .filter(task => task.status === 'approved')
-                .reduce((sum, task) => sum + (task.score || 0), 0)
-            }</p>
+            {userData.role === 'user' && (
+              <p><strong>Pontos acumulados:</strong> {userData.score || 0}</p>
+            )}
           </div>
 
           <hr />
 
-          <div className="profile-section">
-            <h4>Tarefas candidatas</h4>
-            {loadingTasks ? (
-              <p>Carregando tarefas...</p>
-            ) : acceptedTasks.length === 0 ? (
-              <p>Você ainda não se candidatou a nenhuma tarefa.</p>
-            ) : (
-              <div className="tasks-list">
-                {acceptedTasks.map(task => {
-                  const statusMap = {
-                    pending: 'Pendente',
-                    approved: 'Aprovada',
-                    rejected: 'Rejeitada'
-                  };
+          {userData.role === 'user' && (
+            <div className="profile-section">
+              <h4>Tarefas candidatas</h4>
+              {loadingTasks ? (
+                <p>Carregando tarefas...</p>
+              ) : acceptedTasks.length === 0 ? (
+                <p>Você ainda não se candidatou a nenhuma tarefa.</p>
+              ) : (
+                <div className="tasks-list">
+                  {acceptedTasks.map(task => {
+                    const statusMap = {
+                      pending: 'Pendente',
+                      approved: 'Aprovada',
+                      rejected: 'Rejeitada'
+                    };
 
-                  const statusClassMap = {
-                    pending: 'status-pending',
-                    approved: 'status-approved',
-                    rejected: 'status-rejected'
-                  };
+                    const statusClassMap = {
+                      pending: 'status-pending',
+                      approved: 'status-approved',
+                      rejected: 'status-rejected'
+                    };
 
-                  return (
-                    <div key={task._id} className="task-card">
-                      <p><strong>{task.title}</strong></p>
-                      <p className={`task-status ${statusClassMap[task.status]}`}>
-                        Status: {statusMap[task.status] || task.status}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-
-            )}
-          </div>
+                    return (
+                      <div key={task._id} className="task-card">
+                        <p><strong>{task.title}</strong></p>
+                        <p className={`task-status ${statusClassMap[task.status]}`}>
+                          Status: {statusMap[task.status] || task.status}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
 
           <hr />
 
