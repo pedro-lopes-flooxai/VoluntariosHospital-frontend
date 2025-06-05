@@ -1,0 +1,73 @@
+.ranking-board {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fdfdfd;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.ranking-item:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.icon {
+  font-size: 1.8rem;
+  width: 2.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.medal.gold {
+  color: #f1c40f;
+}
+.medal.silver {
+  color: #bdc3c7;
+}
+.medal.bronze {
+  color: #e67e22;
+}
+
+.default-icon {
+  color: #ccc;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.score {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #999;
+}
