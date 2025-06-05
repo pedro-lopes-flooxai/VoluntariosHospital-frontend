@@ -38,3 +38,39 @@
     flex: 1;
     min-width: 250px;
 }
+
+.tasks-list {
+  max-height: 300px; 
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tasks-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tasks-list::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.task-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
