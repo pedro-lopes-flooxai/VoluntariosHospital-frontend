@@ -107,8 +107,8 @@ export default function CreateTaskModal({
                                 <button
                                     key={value}
                                     type="button"
-                                    className={`score-btn ${newTask.score === `${value} pontos` ? 'active' : ''}`}
-                                    onClick={() => setNewTask({ ...newTask, score: `${value} pontos` })}
+                                   className={`score-btn ${newTask.score === value ? 'active' : ''}`}
+                                    onClick={() => setNewTask({ ...newTask, score: value })}
                                 >
                                     {value}
                                 </button>
