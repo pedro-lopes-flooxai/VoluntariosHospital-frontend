@@ -46,7 +46,7 @@ export default function App() {
           />
         )}
 
-        <AppRoutes currentUser={currentUser} />
+        <AppRoutes currentUser={currentUser} onShowLogin={() => setShowLoginModal(true)} />
 
         <UserLogin
           show={showLoginModal}
