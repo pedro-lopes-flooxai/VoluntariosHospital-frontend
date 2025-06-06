@@ -12,7 +12,7 @@ import MyTasks from '../components/profile/Mytasks';
 import TasksCandidates from '../components/tasks/TasksCandidates';
 import PrivateRoute from './PrivateRoute';
 
-export default function AppRoutes() {
+export default function AppRoutes({ onShowLogin }) {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
@@ -21,21 +21,10 @@ export default function AppRoutes() {
 
       <Route
         path="/home"
-        element={
-          <Home />
-        }
+        element={<Home onShowLogin={onShowLogin} />}
       />
 
-      <Route path="/tasks"
-        element={
-          <Tasks />
-        } />
-
-      <Route path="/tasks/:id"
-        element={
-          <TasksDetails />
-        } />
-
+      <Route path="/tasks/:id" element={<TasksDetails />} />
 
       <Route
         path="/profile"
