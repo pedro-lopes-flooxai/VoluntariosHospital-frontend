@@ -32,8 +32,8 @@ export default function App() {
     useEffect(() => {
       if (currentUser) {
           navigate('/home');
-        }
-    }, [currentUser]);
+          }
+    }, [currentUser, navigate]); 
 
     return (
       <div className={`app ${isLandingPage ? 'landing' : ''}`}>
@@ -46,7 +46,10 @@ export default function App() {
           />
         )}
 
-        <AppRoutes currentUser={currentUser} onShowLogin={() => setShowLoginModal(true)} />
+        <AppRoutes
+          currentUser={currentUser}
+          onShowLogin={() => setShowLoginModal(true)}
+        />
 
         <UserLogin
           show={showLoginModal}
