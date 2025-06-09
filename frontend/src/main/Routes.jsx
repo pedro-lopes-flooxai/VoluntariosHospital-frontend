@@ -8,7 +8,6 @@ import Tasks from '../components/tasks/Tasks';
 import TasksDetails from '../components/tasks/TasksDetails';
 import Board from '../components/leaderboard/Board';
 import Profile from '../components/profile/Profile';
-import MyTasks from '../components/profile/Mytasks';
 import TasksCandidates from '../components/tasks/TasksCandidates';
 import PrivateRoute from './PrivateRoute';
 
@@ -31,15 +30,6 @@ export default function AppRoutes({ onShowLogin }) {
         element={
           <PrivateRoute allowedRoles={['user', 'admin']}>
             <Profile />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/mytasks"
-        element={
-          <PrivateRoute allowedRoles={['user', 'admin']}>
-            <MyTasks />
           </PrivateRoute>
         }
       />
