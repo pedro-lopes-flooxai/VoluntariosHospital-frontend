@@ -6,7 +6,7 @@ import {
   createUser,
   updateUser,
   deleteUser
-} from "./UserService";
+} from "./UserServices";
 import "./UserCrud.css";
 
 const headerProps = {
