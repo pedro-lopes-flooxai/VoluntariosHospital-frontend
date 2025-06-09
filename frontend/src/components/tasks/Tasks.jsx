@@ -4,6 +4,7 @@ import { FaCalendarAlt, FaPlus } from 'react-icons/fa'
 import Main from '../template/Main'
 import CreateTaskModal from './CreateTask'
 import './Tasks.css'
+import API_BASE_URL from "../../../api";
 
 const headerProps = {
   icon: 'briefcase',
@@ -30,7 +31,7 @@ export default function Tasks() {
   const token = localStorage.getItem('token')
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/tasks')
+    fetch(`${API_BASE_URL}/api/tasks`)
       .then(res => res.json())
       .then(data => setTaskList(data))
       .catch(err => console.error('Erro ao carregar tarefas:', err))
@@ -46,7 +47,7 @@ export default function Tasks() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/tasks', {
+      const res = await fetch(`${API_BASE_URL}/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

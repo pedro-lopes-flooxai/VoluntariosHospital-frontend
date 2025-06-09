@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../../../api";
 
 import HomeAssist1Img from "../../assets/imgs/HomeAssist1Img.png";
 import HomeAssist2Img from "../../assets/imgs/HomeAssist2Img.png";
@@ -11,7 +12,7 @@ export default function Home({ onShowLogin }) {
   const [totalScore, setTotalScore] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users/total-score")
+     fetch(`${API_BASE_URL}/api/users/total-score`)
       .then((res) => res.json())
       .then((data) => setTotalScore(data.totalScore))
       .catch((err) => {

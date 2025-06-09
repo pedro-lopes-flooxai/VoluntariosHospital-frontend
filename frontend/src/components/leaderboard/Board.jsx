@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import { FaMedal, FaUser } from "react-icons/fa";
 import "./Board.css";
+import API_BASE_URL from "../../../api";
 
 const headerProps = {
   icon: "trophy",
@@ -13,7 +14,7 @@ const Board = () => {
   const [ranking, setRanking] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users/ranking")
+    fetch(`${API_BASE_URL}/api/users/ranking`)
       .then((res) => res.json())
       .then((data) => setRanking(data))
       .catch((err) => console.error("Erro ao buscar ranking:", err));

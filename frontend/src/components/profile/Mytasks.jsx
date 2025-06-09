@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
-import './Mytasks.css'; 
+import './Mytasks.css';
+import API_BASE_URL from "../../../api";
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState([]);
@@ -8,11 +9,11 @@ export default function MyTasks() {
 
   useEffect(() => {
     if (!user) return;
-    fetch('http://localhost:5000/api/tasks')
-      .then(res => res.json())
-      .then(data => {
-        const accepted = data.filter(task =>
-          task.candidates.some(c => c.user === user._id && c.status === 'approved')
+    fetch(`${API_BASE_URL}/api/tasks`)
+      .then((res) => res.json())
+      .then((data) => {
+        const accepted = data.filter((task) =>
+          task.candidates.some((c) => c.user === user._id && c.status === "approved")
         );
         setTasks(accepted);
       });
@@ -25,7 +26,7 @@ export default function MyTasks() {
       <div className="task-details-container">
         {tasks.length === 0 && <p>Você não tem tarefas aceitas no momento.</p>}
 
-        {tasks.map(task => (
+        {tasks.map((task) => (
           <div key={task._id} className="task-details-card">
             <h4>{task.title}</h4>
 

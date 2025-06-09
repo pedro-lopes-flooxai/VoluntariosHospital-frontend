@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './TasksCandidates.css';
+import API_BASE_URL from "../../../api";
 
 const statusLabels = {
   pending: 'Pendente',
@@ -15,7 +16,7 @@ export default function TasksCandidates() {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tasks/${id}`)
+    fetch(`${API_BASE_URL}/api/tasks/${id}`)
       .then(res => res.json())
       .then(data => {
         setCandidates(data.candidates || []);
@@ -27,7 +28,7 @@ export default function TasksCandidates() {
   }, [id]);
 
   const updateStatus = (candidateId, status) => {
-    fetch(`http://localhost:5000/api/tasks/${id}/candidates/${candidateId}`, {
+    fetch(`${API_BASE_URL}/api/tasks/${id}/candidates/${candidateId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

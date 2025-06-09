@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Main from '../template/Main'
 import { FaArrowLeft, FaPaperPlane, FaUsers } from 'react-icons/fa'
 import './TasksDetails.css'
+import API_BASE_URL from '../../../api'
 
 export default function TaskDetails() {
   const { id } = useParams()
@@ -15,7 +16,7 @@ export default function TaskDetails() {
   const token = localStorage.getItem('token')
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tasks/${id}`)
+    fetch(`${API_BASE_URL}/api/tasks/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Tarefa não encontrada')
         return res.json()
@@ -37,7 +38,7 @@ export default function TaskDetails() {
       return
     }
 
-    fetch(`http://localhost:5000/api/tasks/${id}/apply`, {
+    fetch(`${API_BASE_URL}/api/tasks/${id}/apply`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

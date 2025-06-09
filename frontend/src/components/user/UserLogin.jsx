@@ -22,7 +22,7 @@ export default function UserLogin({ show, onClose, onLogin }) {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login/', {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login/`, {
         email,
         password,
       });
@@ -68,9 +68,6 @@ export default function UserLogin({ show, onClose, onLogin }) {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <a href="#" className="forgot-link">
-              Esqueceu a senha?
-            </a>
           </div>
 
           {error && <p style={{ color: 'red' }}>{error}</p>}

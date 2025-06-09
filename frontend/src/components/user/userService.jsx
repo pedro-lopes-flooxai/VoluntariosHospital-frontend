@@ -1,6 +1,7 @@
 import axios from 'axios';
+import API_BASE_URL from '../../../api';
 
-const API_URL = 'http://localhost:5000/api/users';
+const API_URL = `${API_BASE_URL}/api/users`;
 
 export async function fetchUsers(token) {
   const res = await axios.get(API_URL, {

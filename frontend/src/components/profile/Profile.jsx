@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import { Link } from "react-router-dom";
 import './Profile.css';
+import API_BASE_URL from "../../../api";
 
 const headerProps = {
   icon: "user",
@@ -18,14 +19,14 @@ const Profile = () => {
   useEffect(() => {
     if (!token) return;
 
-    fetch('http://localhost:5000/api/users/me', {
+    fetch(`${API_BASE_URL}/api/users/me`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => setUserData(data))
       .catch(err => console.error('Erro ao carregar dados do usuário:', err));
 
-    fetch('http://localhost:5000/api/tasks/applied', {
+    fetch(`${API_BASE_URL}/api/tasks/applied`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
