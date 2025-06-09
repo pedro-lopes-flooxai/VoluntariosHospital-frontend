@@ -4,7 +4,7 @@ import { FaCalendarAlt, FaPlus } from 'react-icons/fa'
 import Main from '../template/Main'
 import CreateTaskModal from './CreateTask'
 import './Tasks.css'
-import API_BASE_URL from "../../../api";
+import API_BASE_URL from "../../api";
 
 const headerProps = {
   icon: 'briefcase',

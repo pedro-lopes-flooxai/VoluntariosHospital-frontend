@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
-import API_BASE_URL from "../../../api";
+import API_BASE_URL from "../../api";
 
 import HomeAssist1Img from "../../assets/imgs/HomeAssist1Img.png";
 import HomeAssist2Img from "../../assets/imgs/HomeAssist2Img.png";

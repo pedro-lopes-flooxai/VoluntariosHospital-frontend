@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Main from '../template/Main'
 import { FaArrowLeft, FaPaperPlane, FaUsers } from 'react-icons/fa'
 import './TasksDetails.css'
-import API_BASE_URL from '../../../api'
+import API_BASE_URL from '../../api'
 
 export default function TaskDetails() {
   const { id } = useParams()

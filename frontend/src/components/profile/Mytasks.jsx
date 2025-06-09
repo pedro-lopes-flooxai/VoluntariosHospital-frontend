@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import './Mytasks.css';
-import API_BASE_URL from "../../../api";
+import API_BASE_URL from "../../api";
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState([]);

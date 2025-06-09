@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
 import { Link } from "react-router-dom";
 import './Profile.css';
-import API_BASE_URL from "../../../api";
+import API_BASE_URL from "../../api";
 
 const headerProps = {
   icon: "user",
