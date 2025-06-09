@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Main from "../template/Main";
 import { FaEdit, FaTrash, FaPlus, FaChevronDown } from "react-icons/fa";
 import {
@@ -6,7 +6,7 @@ import {
   createUser,
   updateUser,
   deleteUser
-} from "./userService";
+} from "./UserService";
 import "./UserCrud.css";
 
 const headerProps = {
@@ -24,7 +24,7 @@ export default function UserCrud() {
 
   const token = localStorage.getItem("token");
 
-  async function loadUsers() {
+  const loadUsers = useCallback(async () => {
     try {
       const data = await fetchUsers(token);
       setUsers(data);
@@ -32,11 +32,11 @@ export default function UserCrud() {
       console.error(err);
       setError("Erro ao buscar usuários. Talvez seu login expirou.");
     }
-  }
+  }, [token]);
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [loadUsers]);
 
   const filteredUsers = users.filter(
     (u) =>
