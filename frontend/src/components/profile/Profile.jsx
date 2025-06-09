@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Main from "../template/Main";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import './Profile.css';
 import API_BASE_URL from "../../api";
 
@@ -10,11 +10,12 @@ const headerProps = {
   subtitle: ""
 };
 
-const Profile = () => {
+const Profile = ({ onLogout }) => {
   const [userData, setUserData] = useState(null);
   const [acceptedTasks, setAcceptedTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(true);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) return;
@@ -49,6 +50,13 @@ const Profile = () => {
   }, [token]);
 
   if (!userData) return <p>Carregando perfil...</p>;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    if (onLogout) onLogout();
+    navigate('/');
+  };
 
   return (
     <Main {...headerProps}>
@@ -103,7 +111,13 @@ const Profile = () => {
           <hr />
 
           <div className="profile-section">
-            <Link to="/" className="profile-link highlight-exit">Sair</Link>
+            <button 
+              onClick={handleLogout} 
+              className="profile-link highlight-exit"
+              type="button"
+            >
+              Sair
+            </button>
           </div>
         </div>
       </div>

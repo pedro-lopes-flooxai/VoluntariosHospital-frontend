@@ -16,19 +16,6 @@ export default function Tasks() {
   const navigate = useNavigate()
   const [taskList, setTaskList] = useState([])
   const [showModal, setShowModal] = useState(false)
-  const [newTask, setNewTask] = useState({
-    patient: '',
-    title: '',
-    type: 'Cuidados com idosos',
-    hours: '',
-    requirements: '',
-    daysLeft: '',
-    score: '',
-    photo: ''
-  })
-
-  const user = JSON.parse(localStorage.getItem('user'))
-  const token = localStorage.getItem('token')
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/tasks`)
@@ -37,55 +24,19 @@ export default function Tasks() {
       .catch(err => console.error('Erro ao carregar tarefas:', err))
   }, [])
 
-  const handleCreateTask = async (e) => {
-    e.preventDefault()
-
-    if (!token) {
-      alert('Você precisa estar logado para criar uma tarefa.')
-      navigate('/login')
-      return
-    }
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/tasks`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(newTask)
-      })
-
-      if (!res.ok) throw new Error('Erro ao criar tarefa')
-
-      const createdTask = await res.json()
-      setTaskList(prev => [...prev, createdTask])
-      setShowModal(false)
-
-      setNewTask({
-        patient: '',
-        title: '',
-        type: 'Cuidados com idosos',
-        hours: '',
-        requirements: '',
-        daysLeft: '',
-        score: '',
-        photo: ''
-      })
-
-    } catch (error) {
-      console.error(error)
-      alert('Erro ao criar tarefa')
-    }
-  }
-
   const handleCreateClick = () => {
+    const user = JSON.parse(localStorage.getItem('user'))
     if (!user) {
       alert('Você precisa estar logado para criar uma tarefa.')
       navigate('/login')
     } else {
       setShowModal(true)
     }
+  }
+
+  const addTaskToList = (createdTask) => {
+    setTaskList(prev => [...prev, createdTask])
+    setShowModal(false)
   }
 
   return (
@@ -117,10 +68,9 @@ export default function Tasks() {
 
       {showModal && (
         <CreateTaskModal
-          newTask={newTask}
-          setNewTask={setNewTask}
           onClose={() => setShowModal(false)}
-          onCreateTask={handleCreateTask}
+          onTaskCreated={addTaskToList}
+          navigate={navigate}
         />
       )}
     </Main>

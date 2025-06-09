@@ -1,17 +1,17 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 
-import Logo from '../components/template/Logo';
-import Nav from '../components/template/Nav';
-import AppRoutes from './Routes';
-import UserLogin from '../components/user/UserLogin';
+import Logo from "../components/template/Logo";
+import Nav from "../components/template/Nav";
+import AppRoutes from "./Routes";
+import UserLogin from "../components/user/UserLogin";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(() => {
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   });
 
@@ -20,23 +20,23 @@ export default function App() {
   function AppContent() {
     const location = useLocation();
     const navigate = useNavigate();
-    const isLandingPage = location.pathname === '/';
+    const isLandingPage = location.pathname === "/";
 
     const handleLogout = () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setCurrentUser(null);
-      navigate('/'); 
+      navigate("/");
     };
 
     useEffect(() => {
-      if (currentUser) {
-          navigate('/home');
-          }
-    }, [navigate]); 
+      if (currentUser && location.pathname === "/") {
+        navigate("/home");
+      }
+    }, [currentUser, location.pathname, navigate]);
 
     return (
-      <div className={`app ${isLandingPage ? 'landing' : ''}`}>
+      <div className={`app ${isLandingPage ? "landing" : ""}`}>
         {!isLandingPage && <Logo />}
         {!isLandingPage && (
           <Nav

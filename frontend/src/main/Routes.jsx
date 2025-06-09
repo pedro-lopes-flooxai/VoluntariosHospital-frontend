@@ -15,7 +15,7 @@ import PrivateRoute from './PrivateRoute';
 export default function AppRoutes({ onShowLogin }) {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage onShowLogin={onShowLogin} />} />
       <Route path="/tasks" element={<Tasks />} />
       <Route path="/board" element={<Board />} />
 
