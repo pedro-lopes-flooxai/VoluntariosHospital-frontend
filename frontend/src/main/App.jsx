@@ -33,7 +33,7 @@ export default function App() {
       if (currentUser) {
           navigate('/home');
           }
-    }, [currentUser, navigate]); 
+    }, [navigate]); 
 
     return (
       <div className={`app ${isLandingPage ? 'landing' : ''}`}>
