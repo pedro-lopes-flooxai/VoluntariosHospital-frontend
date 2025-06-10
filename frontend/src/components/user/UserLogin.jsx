@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './UserLogin.css';
 import axios from 'axios';
 import API_BASE_URL from '../../api';
+import { AuthContext } from '../contexts/AuthContext';
 
-export default function UserLogin({ show, onClose, onLogin }) {
+export default function UserLogin({ show, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const { login } = useContext(AuthContext); 
 
   useEffect(() => {
     if (show) {
@@ -28,13 +31,10 @@ export default function UserLogin({ show, onClose, onLogin }) {
         password,
       });
 
-      console.log("Resposta do backend:", res.data);
-
       const { token, user } = res.data;
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-
-      onLogin(user);
+      localStorage.setItem('token', token); 
+      login(user); 
+      onClose();   
     } catch (err) {
       console.error("Erro completo:", err);
       setError(err.response?.data?.message || 'Erro ao fazer login');
@@ -68,7 +68,6 @@ export default function UserLogin({ show, onClose, onLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-
           </div>
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
