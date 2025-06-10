@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Main from "../template/Main";
 import { useNavigate } from "react-router-dom";
 import './Profile.css';
 import API_BASE_URL from "../../api";
+import { AuthContext } from "../contexts/AuthContext";
 
 const headerProps = {
   icon: "user",
@@ -10,11 +11,12 @@ const headerProps = {
   subtitle: ""
 };
 
-const Profile = ({ onLogout }) => {
+const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [acceptedTasks, setAcceptedTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(true);
-  const token = localStorage.getItem('token');
+  const { logout, currentUser } = useContext(AuthContext); 
+  const token = localStorage.getItem('token'); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,10 +54,8 @@ const Profile = ({ onLogout }) => {
   if (!userData) return <p>Carregando perfil...</p>;
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    if (onLogout) onLogout();
-    navigate('/');
+    logout();
+    navigate('/'); 
   };
 
   return (
