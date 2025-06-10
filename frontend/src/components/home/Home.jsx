@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Main from "../template/Main";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
@@ -7,9 +7,12 @@ import API_BASE_URL from "../../api";
 import HomeAssist1Img from "../../assets/imgs/HomeAssist1Img.png";
 import HomeAssist2Img from "../../assets/imgs/HomeAssist2Img.png";
 
+import { AuthContext } from "../contexts/AuthContext";
+
 export default function Home({ onShowLogin }) {
   const navigate = useNavigate();
   const [totalScore, setTotalScore] = useState(null);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
      fetch(`${API_BASE_URL}/api/users/total-score`)
@@ -46,10 +49,18 @@ export default function Home({ onShowLogin }) {
           />
         </div>
 
-        <div className="info-card card-hover" onClick={onShowLogin}>
+        <div
+          className={`info-card card-hover ${currentUser ? "disabled" : ""}`}
+          onClick={() => {
+            if (!currentUser) onShowLogin();
+          }}
+        >
           <div className="card-content">
-            <h3>Entre agora</h3>
-            <p>Junte-se a nós e comece a fazer a diferença</p>
+            <p>
+              {currentUser
+                ? "Você já está logado no sistema"
+                : "Junte-se a nós e comece a fazer a diferença"}
+            </p>
           </div>
           <img
             src={HomeAssist2Img}
