@@ -59,3 +59,19 @@
 .task-details-btn:hover {
     background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
 }
+
+.rejected-btn {
+  background-color: #dc3545; 
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: not-allowed; 
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.85;
+  transition: none;
+  user-select: none;
+}

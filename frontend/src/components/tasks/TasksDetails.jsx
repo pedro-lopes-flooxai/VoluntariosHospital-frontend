@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Main from '../template/Main'
-import { FaArrowLeft, FaPaperPlane, FaUsers } from 'react-icons/fa'
+import { FaArrowLeft, FaPaperPlane, FaUsers, FaTimes } from 'react-icons/fa'
 import './TasksDetails.css'
 import API_BASE_URL from '../../api'
 
@@ -11,11 +11,14 @@ export default function TaskDetails() {
   const [task, setTask] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [applicationStatus, setApplicationStatus] = useState(null) // null, 'pending', 'approved', 'rejected'
 
   const user = JSON.parse(localStorage.getItem('user'))
   const token = localStorage.getItem('token')
 
   useEffect(() => {
+    if (!user) return
+
     fetch(`${API_BASE_URL}/api/tasks/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Tarefa não encontrada')
@@ -24,6 +27,8 @@ export default function TaskDetails() {
       .then(data => {
         setTask(data)
         setLoading(false)
+        const candidate = data.candidates?.find(c => c.user === user._id)
+        setApplicationStatus(candidate?.status || null)
       })
       .catch(err => {
         setError(err.message)
@@ -45,15 +50,34 @@ export default function TaskDetails() {
         Authorization: `Bearer ${token}`
       }
     })
-      .then(async (res) => {
+      .then(async res => {
         const data = await res.json()
-        if (!res.ok) throw new Error(data.message || 'Erro desconhecido ao se candidatar')
+        if (!res.ok) throw new Error(data.message || 'Erro ao se candidatar')
         alert(data.message)
-        navigate('/profile')
+        setApplicationStatus('pending')
       })
       .catch(err => {
         alert(`Erro: ${err.message}`)
         console.error('Erro ao se candidatar:', err)
+      })
+  }
+
+  const handleUnapply = () => {
+    fetch(`${API_BASE_URL}/api/tasks/${id}/unapply`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(async res => {
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.message || 'Erro ao cancelar candidatura')
+        alert(data.message)
+        setApplicationStatus(null)
+      })
+      .catch(err => {
+        alert(`Erro: ${err.message}`)
+        console.error('Erro ao cancelar candidatura:', err)
       })
   }
 
@@ -94,6 +118,14 @@ export default function TaskDetails() {
                 onClick={() => navigate(`/tasks/${id}/candidates`)}
               >
                 <FaUsers /> Ver Candidatos
+              </button>
+            ) : applicationStatus === 'rejected' ? (
+              <button className="task-details-btn rejected-btn" disabled>
+                <FaTimes /> Rejeitado
+              </button>
+            ) : applicationStatus === 'pending' || applicationStatus === 'approved' ? (
+              <button className="task-details-btn cancel-btn" onClick={handleUnapply}>
+                <FaTimes /> Cancelar candidatura
               </button>
             ) : (
               <button className="task-details-btn apply-btn" onClick={handleApply}>
