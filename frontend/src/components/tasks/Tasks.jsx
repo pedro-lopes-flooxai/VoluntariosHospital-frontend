@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaCalendarAlt, FaPlus } from 'react-icons/fa'
 import Main from '../template/Main'
 import CreateTaskModal from './CreateTask'
 import './Tasks.css'
 import API_BASE_URL from "../../api";
+import { AuthContext } from '../contexts/AuthContext' 
 
 const headerProps = {
   icon: 'briefcase',
@@ -17,6 +18,8 @@ export default function Tasks() {
   const [taskList, setTaskList] = useState([])
   const [showModal, setShowModal] = useState(false)
 
+  const { currentUser } = useContext(AuthContext) 
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/tasks`)
       .then(res => res.json())
@@ -25,13 +28,7 @@ export default function Tasks() {
   }, [])
 
   const handleCreateClick = () => {
-    const user = JSON.parse(localStorage.getItem('user'))
-    if (!user) {
-      alert('Você precisa estar logado para criar uma tarefa.')
-      navigate('/login')
-    } else {
-      setShowModal(true)
-    }
+    setShowModal(true)
   }
 
   const addTaskToList = (createdTask) => {
@@ -42,9 +39,11 @@ export default function Tasks() {
   return (
     <Main {...headerProps}>
       <div className="tasks-header">
-        <button className="create-task-btn" onClick={handleCreateClick}>
-          <FaPlus /> Criar Tarefa
-        </button>
+        {currentUser?.role === 'admin' && ( 
+          <button className="create-task-btn" onClick={handleCreateClick}>
+            <FaPlus /> Criar Tarefa
+          </button>
+        )}
       </div>
 
       <div className="tasks-container">
