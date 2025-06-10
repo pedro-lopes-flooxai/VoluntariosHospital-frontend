@@ -56,6 +56,7 @@ export default function Home({ onShowLogin }) {
           }}
         >
           <div className="card-content">
+            <h3>{currentUser ? "Olá, bem vindo" : "Entre agora"}</h3>
             <p>
               {currentUser
                 ? "Você já está logado no sistema"
