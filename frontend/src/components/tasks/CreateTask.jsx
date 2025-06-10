@@ -72,6 +72,7 @@ export default function CreateTaskModal({
         score: '',
         photo: ''
       })
+       onClose()
     } catch (error) {
       console.error(error)
       alert('Erro ao criar tarefa')
