@@ -1,39 +1,28 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter, useLocation, useNavigate } from 'react-router-dom';
 
 import Logo from '../components/template/Logo';
 import Nav from '../components/template/Nav';
 import AppRoutes from './Routes';
 import UserLogin from '../components/user/UserLogin';
+import { AuthProvider, AuthContext } from '../components/contexts/AuthContext';
 
-export default function App() {
-  const [currentUser, setCurrentUser] = useState(() => {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-  });
-
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
-  function AppContent() {
+function AppContent() {
+  const { currentUser, login, logout } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const isLandingPage = location.pathname === '/';
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setCurrentUser(null);
-    navigate('/');
-  };
+  const isLandingPage = location.pathname === '/';
+  const [showLoginModal, setShowLoginModal] = React.useState(false);
 
   useEffect(() => {
-    if (currentUser && location.pathname !== '/home') {
+    if (currentUser) {
       navigate('/home');
     }
-  }, [currentUser, location.pathname, navigate]);
+  }, [currentUser]);
 
   return (
     <div className={`app ${isLandingPage ? 'landing' : ''}`}>
@@ -42,20 +31,20 @@ export default function App() {
         <Nav
           currentUser={currentUser}
           onShowLogin={() => setShowLoginModal(true)}
-          onLogout={handleLogout}
+          onLogout={() => {
+            logout();
+            navigate('/');
+          }}
         />
       )}
 
-      <AppRoutes
-        currentUser={currentUser}
-        onShowLogin={() => setShowLoginModal(true)}
-      />
+      <AppRoutes onShowLogin={() => setShowLoginModal(true)} />
 
       <UserLogin
         show={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         onLogin={(user) => {
-          setCurrentUser(user);
+          login(user);
           setShowLoginModal(false);
         }}
       />
@@ -63,9 +52,12 @@ export default function App() {
   );
 }
 
+export default function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
