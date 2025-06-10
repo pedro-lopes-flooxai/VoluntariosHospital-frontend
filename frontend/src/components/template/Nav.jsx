@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  FaHome,
-  FaUsers,
-  FaTasks,
-  FaTrophy,
-  FaUser
-} from 'react-icons/fa';
+import { FaHome, FaUsers, FaTasks, FaTrophy, FaUser } from 'react-icons/fa';
+import { AuthContext } from '../contexts/AuthContext';
 import './Nav.css';
 
-export default function Nav({ currentUser, onShowLogin, onLogout }) {
+export default function Nav({ onShowLogin, onLogout }) {
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <aside className="menu-area">
       <nav className="menu">
@@ -31,12 +28,11 @@ export default function Nav({ currentUser, onShowLogin, onLogout }) {
           <FaTrophy /> Pontuação Geral
         </Link>
 
-        {currentUser?.role === 'user' || currentUser?.role === 'admin' ? (
+        {(currentUser?.role === 'user' || currentUser?.role === 'admin') && (
           <Link to="/profile">
             <FaUser /> Meu Perfil
           </Link>
-        ) : null}
-
+        )}
 
         {!currentUser && (
           <button type="button" onClick={onShowLogin}>
