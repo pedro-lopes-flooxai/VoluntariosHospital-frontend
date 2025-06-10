@@ -40,7 +40,7 @@ export default function TasksCandidates() {
       .then(() => {
         setCandidates(prev =>
           prev.map(c =>
-            c.user && c.user._id === candidateId ? { ...c, status } : c
+            c._id === candidateId ? { ...c, status } : c
           )
         );
       })
@@ -55,15 +55,15 @@ export default function TasksCandidates() {
       {candidates.length === 0 && <p>Nenhum candidato ainda.</p>}
 
       {candidates.map((c, index) => (
-        <div key={c.user?._id || index} className="candidate-card">
+        <div key={c._id || index} className="candidate-card">
           <p><strong>Nome:</strong> {c.user?.name || 'Desconhecido'}</p>
           <p><strong>Status:</strong> {statusLabels[c.status]}</p>
           {c.status === 'pending' && (
             <div className="candidate-actions">
-              <button className="btn-approve" onClick={() => updateStatus(c.user._id, 'approved')}>
+              <button className="btn-approve" onClick={() => updateStatus(c._id, 'approved')}>
                 Aprovar
               </button>
-              <button className="btn-reject" onClick={() => updateStatus(c.user._id, 'rejected')}>
+              <button className="btn-reject" onClick={() => updateStatus(c._id, 'rejected')}>
                 Rejeitar
               </button>
             </div>
