@@ -38,14 +38,6 @@ export default function TaskDetails() {
       .then((data) => {
         setTask(data);
         setLoading(false);
-
-        const candidate = data.candidates?.find((c) => {
-          const candidateUserId =
-            typeof c.user === "string" ? c.user : c.user._id;
-          return candidateUserId === user._id;
-        });
-
-        setApplicationStatus(candidate?.status || null);
       })
       .catch((err) => {
         setError(err.message);
@@ -53,8 +45,23 @@ export default function TaskDetails() {
       });
   };
 
+  const fetchUserTaskStatus = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/tasks/applied`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const appliedTasks = await res.json();
+      const currentTask = appliedTasks.find((t) => t._id === id);
+      setApplicationStatus(currentTask?.status || null);
+    } catch (err) {
+      console.error("Erro ao buscar status da tarefa:", err);
+      setApplicationStatus(null);
+    }
+  };
+
   useEffect(() => {
     loadTask();
+    fetchUserTaskStatus();
   }, [id]);
 
   const handleApply = () => {
@@ -75,7 +82,7 @@ export default function TaskDetails() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Erro ao se candidatar");
         alert(data.message);
-        setApplicationStatus("pending");
+        await fetchUserTaskStatus();
         loadTask();
       })
       .catch((err) => {
@@ -96,7 +103,7 @@ export default function TaskDetails() {
         if (!res.ok)
           throw new Error(data.message || "Erro ao cancelar candidatura");
         alert(data.message);
-        setApplicationStatus(null);
+        await fetchUserTaskStatus();
         loadTask();
       })
       .catch((err) => {
