@@ -84,3 +84,21 @@
 .signin-btn:hover {
   background: linear-gradient(135deg, #07a7e3 0%, #32dac3 100%);
 }
+
+.switch-to-register {
+  text-align: left;
+  margin-top: 1rem;
+  font-size: 14px;
+  color: #333;
+}
+
+.switch-to-register span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+  user-select: none; 
+}
+
+.switch-to-register span:hover {
+  color: #0056b3; 
+}
