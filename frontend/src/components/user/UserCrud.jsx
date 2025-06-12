@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import Main from "../template/Main";
 import { FaEdit, FaTrash, FaPlus, FaChevronDown } from "react-icons/fa";
-import {
-  fetchUsers,
-  createUser,
-  updateUser,
-  deleteUser
-} from "./UserServices";
+import { fetchUsers, createUser, updateUser, deleteUser } from "./UserServices";
+import UserRegister from "./UserRegister";
 import "./UserCrud.css";
 
 const headerProps = {
   icon: "users",
   title: "Usuários",
-  subtitle: "Gerencie os usuários do sistema"
+  subtitle: "Gerencie os usuários do sistema",
 };
 
 export default function UserCrud() {
+  const { currentUser } = useContext(AuthContext);
+  const isAdmin = currentUser?.role === "admin";
+
   const [users, setUsers] = useState([]);
   const [filters, setFilters] = useState({ name: "", email: "" });
   const [showModal, setShowModal] = useState(false);
@@ -48,7 +48,7 @@ export default function UserCrud() {
     try {
       if (editingUser) {
         const updated = await updateUser(editingUser._id, user, token);
-        setUsers(users.map(u => (u._id === editingUser._id ? updated : u)));
+        setUsers(users.map((u) => (u._id === editingUser._id ? updated : u)));
       } else {
         await createUser(user, token);
         loadUsers();
@@ -99,7 +99,10 @@ export default function UserCrud() {
             value={filters.email}
             onChange={(e) => setFilters({ ...filters, email: e.target.value })}
           />
-          <button className="modal-btn save-btn" onClick={() => setShowModal(true)}>
+          <button
+            className="modal-btn save-btn"
+            onClick={() => setShowModal(true)}
+          >
             <FaPlus /> Adicionar novo
           </button>
         </div>
@@ -124,10 +127,16 @@ export default function UserCrud() {
                 <td>{user.email}</td>
                 <td>{user.role}</td>
                 <td>
-                  <button className="icon-btn edit" onClick={() => handleEdit(user)}>
+                  <button
+                    className="icon-btn edit"
+                    onClick={() => handleEdit(user)}
+                  >
                     <FaEdit />
                   </button>
-                  <button className="icon-btn delete" onClick={() => handleDelete(user._id)}>
+                  <button
+                    className="icon-btn delete"
+                    onClick={() => handleDelete(user._id)}
+                  >
                     <FaTrash />
                   </button>
                 </td>
@@ -138,92 +147,14 @@ export default function UserCrud() {
       </div>
 
       {showModal && (
-        <UserModal onSave={handleSave} onClose={closeModal} user={editingUser} />
+        <UserRegister
+          show={showModal}
+          onSave={handleSave}
+          onClose={closeModal}
+          user={editingUser}
+          isAdmin={isAdmin}
+        />
       )}
     </Main>
-  );
-}
-
-function UserModal({ onSave, onClose, user }) {
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState(user?.role || "user");
-  const [error, setError] = useState("");
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setError("As senhas não coincidem.");
-      return;
-    }
-
-    if (!user && password.trim() === "") {
-      setError("Senha é obrigatória para novo usuário.");
-      return;
-    }
-
-    setError("");
-    onSave({ name, email, password, role });
-  }
-
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="close-button" onClick={onClose}>
-          ×
-        </button>
-        <h2 style={{ textAlign: "center", marginBottom: 20 }}>
-          {user ? "Editar Usuário" : "Novo Usuário"}
-        </h2>
-        <form className="modal-form" onSubmit={handleSubmit}>
-          <label>Nome</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-
-          <label>Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-          <label>Senha {user ? "(deixe vazio para manter)" : ""}</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder={user ? "Deixe a senha vazia para mantê-la" : ""}
-            required={!user}
-          />
-
-          <label>Confirmar Senha</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder={user ? "Confirme a senha ou deixe vazio" : ""}
-            required={!user}
-          />
-
-          {error && <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>}
-
-          <label>Nível</label>
-          <div className="custom-select">
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="user">Usuário</option>
-              <option value="admin">Administrador</option>
-            </select>
-            <FaChevronDown className="select-icon" />
-          </div>
-
-          <div className="modal-buttons">
-            <button type="submit" className="modal-btn save-btn">
-              Salvar
-            </button>
-            <button type="button" className="modal-btn cancel-btn" onClick={onClose}>
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
   );
 }
